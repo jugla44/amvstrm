@@ -305,27 +305,37 @@ if (query.q || query.genres || query.tags) {
           </div>
         </div>
       </v-card-text>
-      <v-list v-if="searchResults?.results.length > 0" lines="two">
-        <v-list-item title="Search result" />
-        <v-divider />
-        <div v-if="searchLoading" class="loadingBlock">
-          <v-progress-circular :size="45" indeterminate />
-        </div>
-        <v-list-item
+      <v-row v-else>
+        <v-col
           v-for="item in searchResults.results"
-          v-else
           :key="item.id"
-          :to="'/anime/' + item.id"
+          cols="12"
+          sm="6"
+          md="4"
+          lg="3"
         >
-          <template #prepend>
-            <img
+          <v-card :to="'/anime/' + item.id" class="search-card">
+            <v-img
               v-if="item.coverImage.medium"
-              class="ma-2"
               :src="item.coverImage.medium"
               :alt="item.id + '_img'"
-              style="border-radius: 4px; width: 60px; height: 10%"
+              class="search-card-image"
             />
-          </template>
+            <v-card-title class="search-card-title">{{ item.title.userPreferred }}</v-card-title>
+            <v-card-subtitle class="search-card-subtitle">
+              Episode {{ item.episodes }} /
+              {{ getStatusText(item.status) }}
+            </v-card-subtitle>
+            <v-card-actions>
+              <v-icon color="yellow">mdi-star</v-icon>
+              {{ item.averageScore / 10 }}
+            </v-card-actions>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-card>
+  </v-container>
+</template>
           <v-list-item-title>{{ item.title.userPreferred }}</v-list-item-title>
           <v-list-item-subtitle>
             Episode {{ item.episodes }} /
